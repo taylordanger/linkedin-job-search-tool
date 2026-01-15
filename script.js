@@ -8,6 +8,9 @@ let stripe;
 // Premium status (in production, check this from your backend/database)
 let isPremiumUser = false;
 
+// Current selected platform
+let currentPlatform = 'linkedin';
+
 // Initialize Stripe with key from backend
 fetch(`${API_URL}/config`)
     .then(response => response.json())
@@ -19,12 +22,86 @@ fetch(`${API_URL}/config`)
         console.error('Failed to initialize Stripe:', error);
     });
 
+// Platform tab switching
+document.addEventListener('DOMContentLoaded', function() {
+    const platformTabs = document.querySelectorAll('.platform-tab');
+    
+    platformTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            // Remove active class from all tabs
+            platformTabs.forEach(t => t.classList.remove('active'));
+            // Add active class to clicked tab
+            this.classList.add('active');
+            // Update current platform
+            currentPlatform = this.dataset.platform;
+            // Update form visibility
+            updateFormForPlatform(currentPlatform);
+        });
+    });
+    
+    // Check premium status from localStorage
+    isPremiumUser = localStorage.getItem('isPremium') === 'true';
+    
+    if (isPremiumUser) {
+        enablePremiumFeatures();
+        hideAds();
+    }
+    
+    // Add example placeholder rotation
+    const keywordsInput = document.getElementById('keywords');
+    const examples = [
+        'Software Engineer',
+        'Product Manager',
+        'Data Scientist',
+        'UX Designer',
+        'DevOps Engineer',
+        'Marketing Manager'
+    ];
+    
+    let exampleIndex = 0;
+    setInterval(() => {
+        if (keywordsInput !== document.activeElement && !keywordsInput.value) {
+            exampleIndex = (exampleIndex + 1) % examples.length;
+            keywordsInput.placeholder = `e.g., ${examples[exampleIndex]}`;
+        }
+    }, 3000);
+});
+
+// Update form fields based on platform
+function updateFormForPlatform(platform) {
+    const timePostedGroup = document.getElementById('timePosted').closest('.form-group');
+    const datePostedGroup = document.getElementById('datePostedGroup');
+    
+    if (platform === 'linkedin') {
+        timePostedGroup.style.display = 'block';
+        datePostedGroup.style.display = 'none';
+    } else {
+        timePostedGroup.style.display = 'none';
+        datePostedGroup.style.display = 'block';
+    }
+}
+
 document.getElementById('searchForm').addEventListener('submit', function(e) {
     e.preventDefault();
     generateLinkedInUrl();
 });
 
 function generateLinkedInUrl() {
+    switch(currentPlatform) {
+        case 'linkedin':
+            return generateLinkedInURL();
+        case 'indeed':
+            return generateIndeedURL();
+        case 'ziprecruiter':
+            return generateZipRecruiterURL();
+        case 'glassdoor':
+            return generateGlassdoorURL();
+        default:
+            return generateLinkedInURL();
+    }
+}
+
+function generateLinkedInURL() {
     const baseUrl = 'https://www.linkedin.com/jobs/search/';
     const params = new URLSearchParams();
     
@@ -72,10 +149,98 @@ function generateLinkedInUrl() {
     }
     
     // Construct final URL
-    const finalUrl = baseUrl + '?' + params.toString();
+    return baseUrl + '?' + params.toString();
+}
+
+function generateIndeedURL() {
+    const baseUrl = 'https://www.indeed.com/jobs';
+    const params = new URLSearchParams();
     
-    // Display result
-    displayResult(finalUrl);
+    const keywords = document.getElementById('keywords').value.trim();
+    const location = document.getElementById('location').value.trim();
+    const datePosted = document.getElementById('datePosted').value;
+    const remoteFilter = document.getElementById('remoteFilter').checked;
+    
+    if (keywords) {
+        params.append('q', keywords);
+    }
+    
+    if (location) {
+        params.append('l', location);
+    }
+    
+    if (datePosted) {
+        params.append('fromage', datePosted);
+    }
+    
+    if (remoteFilter) {
+        params.append('remotejob', '1');
+    }
+    
+    // Add affiliate parameter if available
+    // params.append('from', 'YOUR_AFFILIATE_ID');
+    
+    return baseUrl + '?' + params.toString();
+}
+
+function generateZipRecruiterURL() {
+    const baseUrl = 'https://www.ziprecruiter.com/jobs-search';
+    const params = new URLSearchParams();
+    
+    const keywords = document.getElementById('keywords').value.trim();
+    const location = document.getElementById('location').value.trim();
+    const datePosted = document.getElementById('datePosted').value;
+    const remoteFilter = document.getElementById('remoteFilter').checked;
+    
+    if (keywords) {
+        params.append('search', keywords);
+    }
+    
+    if (location) {
+        params.append('location', location);
+    }
+    
+    if (datePosted) {
+        params.append('days', datePosted);
+    }
+    
+    if (remoteFilter) {
+        params.append('refine_by_location_type', 'remote');
+    }
+    
+    // Add affiliate parameter if available
+    // params.append('affiliate_id', 'YOUR_AFFILIATE_ID');
+    
+    return baseUrl + '?' + params.toString();
+}
+
+function generateGlassdoorURL() {
+    const baseUrl = 'https://www.glassdoor.com/Job/jobs.htm';
+    const params = new URLSearchParams();
+    
+    const keywords = document.getElementById('keywords').value.trim();
+    const location = document.getElementById('location').value.trim();
+    const datePosted = document.getElementById('datePosted').value;
+    const remoteFilter = document.getElementById('remoteFilter').checked;
+    
+    if (keywords) {
+        params.append('sc.keyword', keywords);
+    }
+    
+    if (location) {
+        params.append('locT', 'C');
+        params.append('locId', location);
+    }
+    
+    if (datePosted) {
+        params.append('fromAge', datePosted);
+    }
+    
+    if (remoteFilter) {
+        params.append('remoteWorkType', '1');
+    }
+    
+    return baseUrl + '?' + params.toString();
 }
 
 function displayResult(url) {
@@ -85,9 +250,33 @@ function displayResult(url) {
     generatedUrl.value = url;
     resultContainer.style.display = 'block';
     
+    // Update platform name in result
+    const platformNames = {
+        'linkedin': 'LinkedIn',
+        'indeed': 'Indeed',
+        'ziprecruiter': 'ZipRecruiter',
+        'glassdoor': 'Glassdoor'
+    };
+    
+    const resultTitle = resultContainer.querySelector('h2');
+    resultTitle.textContent = `Generated ${platformNames[currentPlatform]} URL`;
+    
     // Smooth scroll to result
     resultContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
+
+// Open in correct platform
+document.getElementById('openBtn').addEventListener('click', function() {
+    const url = document.getElementById('generatedUrl').value;
+    window.open(url, '_blank');
+});
+
+// Generate URL and display result
+document.getElementById('searchForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const url = generateLinkedInUrl();
+    displayResult(url);
+});
 
 // Copy to clipboard functionality
 document.getElementById('copyBtn').addEventListener('click', function() {
@@ -111,6 +300,14 @@ document.getElementById('copyBtn').addEventListener('click', function() {
     });
 });
 
+// Log F_TPR info to console for developers
+console.log('%c Multi-Platform Job Search URL Generator ', 'background: #0073b1; color: white; font-size: 14px; font-weight: bold; padding: 5px;');
+console.log('Supported platforms:');
+console.log('  - LinkedIn (with F_TPR parameter)');
+console.log('  - Indeed');
+console.log('  - ZipRecruiter');
+console.log('  - Glassdoor');
+
 // Open in LinkedIn functionality
 document.getElementById('openBtn').addEventListener('click', function() {
     const url = document.getElementById('generatedUrl').value;
@@ -118,34 +315,7 @@ document.getElementById('openBtn').addEventListener('click', function() {
 });
 
 // Add helpful tooltips and examples
-document.addEventListener('DOMContentLoaded', function() {
-    // Check premium status from localStorage
-    isPremiumUser = localStorage.getItem('isPremium') === 'true';
-    
-    if (isPremiumUser) {
-        enablePremiumFeatures();
-        hideAds();
-    }
-    
-    // Add example placeholder rotation
-    const keywordsInput = document.getElementById('keywords');
-    const examples = [
-        'Software Engineer',
-        'Product Manager',
-        'Data Scientist',
-        'UX Designer',
-        'DevOps Engineer',
-        'Marketing Manager'
-    ];
-    
-    let exampleIndex = 0;
-    setInterval(() => {
-        if (keywordsInput !== document.activeElement && !keywordsInput.value) {
-            exampleIndex = (exampleIndex + 1) % examples.length;
-            keywordsInput.placeholder = `e.g., ${examples[exampleIndex]}`;
-        }
-    }, 3000);
-});
+// (Already in DOMContentLoaded above)
 
 // F_TPR time calculations helper
 function secondsToHumanReadable(seconds) {

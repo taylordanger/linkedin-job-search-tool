@@ -302,6 +302,70 @@ header h1 {
     margin-bottom: 30px;
 }
 
+/* Platform Selector */
+.platform-selector {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #33ff33;
+}
+
+.platform-selector label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #33ff33;
+    font-size: 1.1em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+.platform-tabs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+}
+
+.platform-tab {
+    padding: 15px 10px;
+    background: #000000;
+    border: 2px solid #33ff33;
+    color: #33ff33;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.85em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.platform-tab:hover {
+    background: rgba(51, 255, 51, 0.1);
+    box-shadow: 0 0 10px rgba(51, 255, 51, 0.3);
+}
+
+.platform-tab.active {
+    background: #33ff33;
+    color: #000000;
+    box-shadow: 0 0 15px rgba(51, 255, 51, 0.5);
+}
+
+.tab-icon {
+    font-size: 1.5em;
+}
+
+.platform-note {
+    font-size: 0.75em;
+    opacity: 0.7;
+    font-weight: normal;
+    text-transform: none;
+}
+
 .form-group {
     margin-bottom: 25px;
 }

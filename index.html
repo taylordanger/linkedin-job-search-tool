@@ -9,8 +9,8 @@
 <body>
     <div class="container">
         <header>
-            <h1>🔗 LinkedIn Job Search URL Generator</h1>
-            <p class="subtitle">Generate optimized LinkedIn job search URLs with time filters</p>
+            <h1>🔗 Multi-Platform Job Search URL Generator</h1>
+            <p class="subtitle">Generate optimized job search URLs for LinkedIn, Indeed, ZipRecruiter & Glassdoor</p>
             
             <!-- Donation Buttons -->
             <div class="support-buttons">
@@ -55,6 +55,29 @@
         </div>
 
         <div class="form-container">
+            <!-- Platform Selector -->
+            <div class="platform-selector">
+                <label>Select Job Platform</label>
+                <div class="platform-tabs">
+                    <button type="button" class="platform-tab active" data-platform="linkedin">
+                        <span class="tab-icon">💼</span>
+                        LinkedIn
+                    </button>
+                    <button type="button" class="platform-tab" data-platform="indeed">
+                        <span class="tab-icon">🔍</span>
+                        Indeed
+                    </button>
+                    <button type="button" class="platform-tab" data-platform="ziprecruiter">
+                        <span class="tab-icon">📋</span>
+                        ZipRecruiter
+                    </button>
+                    <button type="button" class="platform-tab" data-platform="glassdoor">
+                        <span class="tab-icon">🎯</span>
+                        Glassdoor
+                    </button>
+                </div>
+            </div>
+
             <form id="searchForm">
                 <div class="form-group">
                     <label for="keywords">Keywords</label>
@@ -67,7 +90,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="timePosted">Time Posted </label>
+                    <label for="timePosted">Time Posted <span class="platform-note">(LinkedIn only)</span></label>
                     <select id="timePosted">
                         <option value="">Any time</option>
                         <option value="r60">Last minute (r60)</option>
@@ -75,6 +98,19 @@
                         <option value="r86400">Last 24 hours (r86400)</option>
                         <option value="r604800">Last week (r604800)</option>
                         <option value="r2592000">Last month (r2592000)</option>
+                    </select>
+                </div>
+
+                <!-- Date Posted (for other platforms) -->
+                <div class="form-group" id="datePostedGroup" style="display: none;">
+                    <label for="datePosted">Date Posted</label>
+                    <select id="datePosted">
+                        <option value="">Any time</option>
+                        <option value="1">Last 24 hours</option>
+                        <option value="3">Last 3 days</option>
+                        <option value="7">Last 7 days</option>
+                        <option value="14">Last 14 days</option>
+                        <option value="30">Last 30 days</option>
                     </select>
                 </div>
 
