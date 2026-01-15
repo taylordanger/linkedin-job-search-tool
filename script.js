@@ -6,7 +6,7 @@ const API_URL = 'https://linkedin-job-search-tool-production.up.railway.app';
 let stripe;
 
 // Premium status (in production, check this from your backend/database)
-let isPremiumUser = false;
+let isPremiumUser = true; // TEMPORARY: Set to true for testing
 
 // Current selected platform
 let currentPlatform = 'linkedin';
