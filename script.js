@@ -1,4 +1,10 @@
 // LinkedIn Job Search URL Generator with F_TPR support
+// Stripe Configuration
+const STRIPE_PUBLISHABLE_KEY = 'pk_test_YOUR_PUBLISHABLE_KEY_HERE'; // Replace with your Stripe key
+const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+
+// Premium status (in production, check this from your backend/database)
+let isPremiumUser = false;
 
 document.getElementById('searchForm').addEventListener('submit', function(e) {
     e.preventDefault();
@@ -100,6 +106,14 @@ document.getElementById('openBtn').addEventListener('click', function() {
 
 // Add helpful tooltips and examples
 document.addEventListener('DOMContentLoaded', function() {
+    // Check premium status from localStorage
+    isPremiumUser = localStorage.getItem('isPremium') === 'true';
+    
+    if (isPremiumUser) {
+        enablePremiumFeatures();
+        hideAds();
+    }
+    
     // Add example placeholder rotation
     const keywordsInput = document.getElementById('keywords');
     const examples = [
@@ -147,3 +161,103 @@ console.log('  r3600 = Last hour (3,600 seconds)');
 console.log('  r86400 = Last 24 hours (86,400 seconds)');
 console.log('  r604800 = Last week (604,800 seconds)');
 console.log('  r2592000 = Last month (2,592,000 seconds)');
+
+// Premium Features
+function enablePremiumFeatures() {
+    // Enable all premium inputs
+    document.querySelectorAll('.premium-feature select, .premium-feature input').forEach(el => {
+        el.disabled = false;
+    });
+    
+    // Hide premium badges
+    document.querySelectorAll('.premium-badge').forEach(badge => {
+        badge.style.display = 'none';
+    });
+    
+    // Update upgrade button
+    const upgradeBtn = document.getElementById('upgradeToPremium');
+    upgradeBtn.textContent = '✓ Premium Active';
+    upgradeBtn.style.background = '#33ff33';
+    upgradeBtn.style.color = '#000000';
+    upgradeBtn.style.cursor = 'default';
+    upgradeBtn.disabled = true;
+}
+
+function hideAds() {
+    document.querySelectorAll('.ad-container, .ad-sidebar, .affiliate-box').forEach(ad => {
+        ad.style.display = 'none';
+    });
+}
+
+// Modal functionality
+const modal = document.getElementById('premiumModal');
+const upgradeBtn = document.getElementById('upgradeToPremium');
+const closeBtn = document.querySelector('.close');
+const checkoutBtn = document.getElementById('checkoutBtn');
+
+upgradeBtn.addEventListener('click', function() {
+    if (!isPremiumUser) {
+        modal.style.display = 'block';
+    }
+});
+
+closeBtn.addEventListener('click', function() {
+    modal.style.display = 'none';
+});
+
+window.addEventListener('click', function(e) {
+    if (e.target === modal) {
+        modal.style.display = 'none';
+    }
+});
+
+// Stripe Checkout
+checkoutBtn.addEventListener('click', async function() {
+    // In production, create a checkout session on your backend
+    // This is a simplified example
+    try {
+        // Call your backend to create a Stripe Checkout Session
+        const response = await fetch('YOUR_BACKEND_URL/create-checkout-session', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                priceId: 'price_YOUR_PRICE_ID', // Your Stripe Price ID
+            }),
+        });
+        
+        const session = await response.json();
+        
+        // Redirect to Stripe Checkout
+        const result = await stripe.redirectToCheckout({
+            sessionId: session.id,
+        });
+        
+        if (result.error) {
+            alert(result.error.message);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        
+        // For demo purposes - simulate successful purchase
+        if (confirm('Demo Mode: Simulate successful payment? (In production, this will use real Stripe payment)')) {
+            localStorage.setItem('isPremium', 'true');
+            isPremiumUser = true;
+            enablePremiumFeatures();
+            hideAds();
+            modal.style.display = 'none';
+            alert('🎉 Premium activated! Enjoy all features.');
+        }
+    }
+});
+
+// Handle premium feature clicks (show upgrade modal)
+document.querySelectorAll('.premium-feature select, .premium-feature input').forEach(el => {
+    el.addEventListener('click', function(e) {
+        if (!isPremiumUser && el.disabled) {
+            e.preventDefault();
+            modal.style.display = 'block';
+        }
+    });
+});

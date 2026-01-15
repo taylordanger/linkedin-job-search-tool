@@ -11,7 +11,48 @@
         <header>
             <h1>🔗 LinkedIn Job Search URL Generator</h1>
             <p class="subtitle">Generate optimized LinkedIn job search URLs with time filters</p>
+            
+            <!-- Donation Buttons -->
+            <div class="support-buttons">
+                <a href="https://www.buymeacoffee.com/yourusername" target="_blank" class="btn-donate">
+                    ☕ Buy Me a Coffee
+                </a>
+                <a href="https://ko-fi.com/yourusername" target="_blank" class="btn-donate">
+                    💝 Support on Ko-fi
+                </a>
+                <button id="upgradeToPremium" class="btn-premium">✨ Upgrade to Premium</button>
+            </div>
         </header>
+
+        <!-- LinkedIn Premium Affiliate -->
+        <div class="affiliate-box">
+            <div class="affiliate-content">
+                <h3>🔥 Supercharge Your Job Search</h3>
+                <p>Get LinkedIn Premium and unlock InMail, salary insights, and appear as a featured applicant!</p>
+                <a href="https://www.linkedin.com/premium/products/?upsellOrderOrigin=default_guest_homepage&src=go-pa" 
+                   target="_blank" 
+                   rel="nofollow" 
+                   class="btn-affiliate">
+                    Try LinkedIn Premium Free for 30 Days
+                </a>
+            </div>
+        </div>
+
+        <!-- Google AdSense Placeholder -->
+        <div class="ad-container">
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXX"
+                    crossorigin="anonymous"></script>
+            <!-- Horizontal Ad -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-XXXXXXXXX"
+                 data-ad-slot="XXXXXXXXX"
+                 data-ad-format="horizontal"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
 
         <div class="form-container">
             <form id="searchForm">
@@ -37,9 +78,9 @@
                     </select>
                 </div>
 
-                <div class="form-group">
-                    <label for="experienceLevel">Experience Level</label>
-                    <select id="experienceLevel" multiple size="5">
+                <div class="form-group premium-feature" data-feature="experience-filter">
+                    <label for="experienceLevel">Experience Level <span class="premium-badge">PREMIUM</span></label>
+                    <select id="experienceLevel" multiple size="5" disabled>
                         <option value="1">Internship</option>
                         <option value="2">Entry level</option>
                         <option value="3">Associate</option>
@@ -50,9 +91,9 @@
                     <small>Hold Ctrl/Cmd to select multiple</small>
                 </div>
 
-                <div class="form-group">
-                    <label for="jobType">Job Type</label>
-                    <select id="jobType" multiple size="4">
+                <div class="form-group premium-feature" data-feature="job-type-filter">
+                    <label for="jobType">Job Type <span class="premium-badge">PREMIUM</span></label>
+                    <select id="jobType" multiple size="4" disabled>
                         <option value="F">Full-time</option>
                         <option value="P">Part-time</option>
                         <option value="C">Contract</option>
@@ -63,14 +104,14 @@
                     <small>Hold Ctrl/Cmd to select multiple</small>
                 </div>
 
-                <div class="form-group checkbox-group">
+                <div class="form-group checkbox-group premium-feature" data-feature="advanced-filters">
                     <label>
-                        <input type="checkbox" id="remoteFilter">
-                        Remote jobs only
+                        <input type="checkbox" id="remoteFilter" disabled>
+                        Remote jobs only <span class="premium-badge">PREMIUM</span>
                     </label>
                     <label>
-                        <input type="checkbox" id="easyApply">
-                        Easy Apply only
+                        <input type="checkbox" id="easyApply" disabled>
+                        Easy Apply only <span class="premium-badge">PREMIUM</span>
                     </label>
                 </div>
 
@@ -99,6 +140,52 @@
         </div>
     </div>
 
+    <!-- Premium Modal -->
+    <div id="premiumModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>✨ Upgrade to Premium</h2>
+            <div class="pricing-box">
+                <h3>Premium Features</h3>
+                <ul class="features-list">
+                    <li>✓ Unlimited searches per day</li>
+                    <li>✓ Experience level filtering</li>
+                    <li>✓ Job type filtering</li>
+                    <li>✓ Remote & Easy Apply filters</li>
+                    <li>✓ Save search templates</li>
+                    <li>✓ Search history</li>
+                    <li>✓ Email alerts for new jobs</li>
+                    <li>✓ Bulk URL generation</li>
+                    <li>✓ No ads</li>
+                    <li>✓ Priority support</li>
+                </ul>
+                <div class="price-tag">
+                    <span class="price">$4.99</span>
+                    <span class="period">/month</span>
+                </div>
+                <button id="checkoutBtn" class="btn-checkout">Proceed to Checkout</button>
+                <p class="secure-text">🔒 Secure payment powered by Stripe</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Google AdSense Sidebar -->
+    <div class="ad-sidebar">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXX"
+                crossorigin="anonymous"></script>
+        <!-- Sidebar Ad -->
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-XXXXXXXXX"
+             data-ad-slot="XXXXXXXXX"
+             data-ad-format="vertical"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+
+    <!-- Stripe JS -->
+    <script src="https://js.stripe.com/v3/"></script>
     <script src="script.js"></script>
 </body>
 </html>
