@@ -156,7 +156,7 @@
             localStorage.setItem('isPremium', 'true');
             
             // Optional: Verify with backend
-            fetch('http://localhost:3000/verify-subscription', {
+            fetch('https://linkedin-job-search-tool-production.up.railway.app/verify-subscription', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

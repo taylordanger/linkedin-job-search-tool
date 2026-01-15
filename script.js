@@ -1,10 +1,23 @@
 // LinkedIn Job Search URL Generator with F_TPR support
-// Stripe Configuration
-const STRIPE_PUBLISHABLE_KEY = 'pk_test_YOUR_PUBLISHABLE_KEY_HERE'; // Replace with your Stripe key
-const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+// Backend API Configuration
+const API_URL = 'https://linkedin-job-search-tool-production.up.railway.app';
+
+// Stripe Configuration (will be fetched from backend)
+let stripe;
 
 // Premium status (in production, check this from your backend/database)
 let isPremiumUser = false;
+
+// Initialize Stripe with key from backend
+fetch(`${API_URL}/config`)
+    .then(response => response.json())
+    .then(data => {
+        stripe = Stripe(data.publishableKey);
+        console.log('Stripe initialized successfully');
+    })
+    .catch(error => {
+        console.error('Failed to initialize Stripe:', error);
+    });
 
 document.getElementById('searchForm').addEventListener('submit', function(e) {
     e.preventDefault();
@@ -213,19 +226,26 @@ window.addEventListener('click', function(e) {
 
 // Stripe Checkout
 checkoutBtn.addEventListener('click', async function() {
-    // In production, create a checkout session on your backend
-    // This is a simplified example
     try {
+        if (!stripe) {
+            alert('Payment system is initializing. Please try again in a moment.');
+            return;
+        }
+        
         // Call your backend to create a Stripe Checkout Session
-        const response = await fetch('YOUR_BACKEND_URL/create-checkout-session', {
+        const response = await fetch(`${API_URL}/create-checkout-session`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                priceId: 'price_YOUR_PRICE_ID', // Your Stripe Price ID
+                customerEmail: prompt('Enter your email for the receipt:') || undefined
             }),
         });
+        
+        if (!response.ok) {
+            throw new Error('Failed to create checkout session');
+        }
         
         const session = await response.json();
         
@@ -239,16 +259,7 @@ checkoutBtn.addEventListener('click', async function() {
         }
     } catch (error) {
         console.error('Error:', error);
-        
-        // For demo purposes - simulate successful purchase
-        if (confirm('Demo Mode: Simulate successful payment? (In production, this will use real Stripe payment)')) {
-            localStorage.setItem('isPremium', 'true');
-            isPremiumUser = true;
-            enablePremiumFeatures();
-            hideAds();
-            modal.style.display = 'none';
-            alert('🎉 Premium activated! Enjoy all features.');
-        }
+        alert('Failed to start checkout. Please make sure the backend is running and try again.');
     }
 });
 
