@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkedIn Job Search URL Generator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔗 LinkedIn Job Search URL Generator</h1>
+            <p class="subtitle">Generate optimized LinkedIn job search URLs with time filters</p>
+        </header>
+
+        <div class="form-container">
+            <form id="searchForm">
+                <div class="form-group">
+                    <label for="keywords">Keywords</label>
+                    <input type="text" id="keywords" placeholder="e.g., Software Engineer, Product Manager">
+                </div>
+
+                <div class="form-group">
+                    <label for="location">Location</label>
+                    <input type="text" id="location" placeholder="e.g., San Francisco, Remote">
+                </div>
+
+                <div class="form-group">
+                    <label for="timePosted">Time Posted (F_TPR)</label>
+                    <select id="timePosted">
+                        <option value="">Any time</option>
+                        <option value="r60">Last minute (r60)</option>
+                        <option value="r3600">Last hour (r3600)</option>
+                        <option value="r86400">Last 24 hours (r86400)</option>
+                        <option value="r604800">Last week (r604800)</option>
+                        <option value="r2592000">Last month (r2592000)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="experienceLevel">Experience Level</label>
+                    <select id="experienceLevel" multiple size="5">
+                        <option value="1">Internship</option>
+                        <option value="2">Entry level</option>
+                        <option value="3">Associate</option>
+                        <option value="4">Mid-Senior level</option>
+                        <option value="5">Director</option>
+                        <option value="6">Executive</option>
+                    </select>
+                    <small>Hold Ctrl/Cmd to select multiple</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="jobType">Job Type</label>
+                    <select id="jobType" multiple size="4">
+                        <option value="F">Full-time</option>
+                        <option value="P">Part-time</option>
+                        <option value="C">Contract</option>
+                        <option value="T">Temporary</option>
+                        <option value="V">Volunteer</option>
+                        <option value="I">Internship</option>
+                    </select>
+                    <small>Hold Ctrl/Cmd to select multiple</small>
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <label>
+                        <input type="checkbox" id="remoteFilter">
+                        Remote jobs only
+                    </label>
+                    <label>
+                        <input type="checkbox" id="easyApply">
+                        Easy Apply only
+                    </label>
+                </div>
+
+                <button type="submit" class="btn-generate">Generate URL</button>
+            </form>
+        </div>
+
+        <div class="result-container" id="resultContainer" style="display: none;">
+            <h2>Generated URL</h2>
+            <div class="url-display">
+                <input type="text" id="generatedUrl" readonly>
+                <button class="btn-copy" id="copyBtn">Copy</button>
+            </div>
+            <button class="btn-open" id="openBtn">Open in LinkedIn</button>
+            
+            <div class="info-box">
+                <h3>F_TPR Parameter Breakdown</h3>
+                <ul>
+                    <li><strong>r60</strong>: Last 60 seconds (1 minute)</li>
+                    <li><strong>r3600</strong>: Last 3,600 seconds (1 hour)</li>
+                    <li><strong>r86400</strong>: Last 86,400 seconds (24 hours)</li>
+                    <li><strong>r604800</strong>: Last 604,800 seconds (7 days)</li>
+                    <li><strong>r2592000</strong>: Last 2,592,000 seconds (30 days)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
