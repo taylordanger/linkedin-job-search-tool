@@ -114,6 +114,42 @@
                     </select>
                 </div>
 
+                <!-- Advanced Filters for All Platforms -->
+                <div class="form-group">
+                    <label for="sortBy">Sort By <span class="edge-badge">🚀 EDGE</span></label>
+                    <select id="sortBy">
+                        <option value="">Relevance</option>
+                        <option value="date">Newest First (Best for quick apply!)</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="salaryFilterGroup">
+                    <label for="minSalary">Minimum Salary <span class="edge-badge">💰 EDGE</span></label>
+                    <select id="minSalary">
+                        <option value="">Any salary</option>
+                        <option value="40000">$40,000+</option>
+                        <option value="50000">$50,000+</option>
+                        <option value="60000">$60,000+</option>
+                        <option value="75000">$75,000+</option>
+                        <option value="100000">$100,000+</option>
+                        <option value="125000">$125,000+</option>
+                        <option value="150000">$150,000+</option>
+                        <option value="200000">$200,000+</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="radiusGroup">
+                    <label for="radius">Search Radius <span class="edge-badge">📍 EDGE</span></label>
+                    <select id="radius">
+                        <option value="">Default</option>
+                        <option value="5">5 miles (Hyper-local)</option>
+                        <option value="10">10 miles</option>
+                        <option value="25">25 miles</option>
+                        <option value="50">50 miles</option>
+                        <option value="100">100 miles</option>
+                    </select>
+                </div>
+
                 <div class="form-group premium-feature" data-feature="experience-filter">
                     <label for="experienceLevel">Experience Level <span class="premium-badge">PREMIUM</span></label>
                     <select id="experienceLevel" multiple size="5" disabled>
@@ -164,7 +200,21 @@
             <button class="btn-open" id="openBtn">Open in LinkedIn</button>
             
             <div class="info-box">
-                <h3>F_TPR Parameter Breakdown</h3>
+                <h3>🚀 Competitive Edge Features</h3>
+                <ul>
+                    <li><strong>Sort by Newest</strong>: See jobs before others do - be first to apply!</li>
+                    <li><strong>Salary Filters</strong>: Skip low-paying jobs, save time</li>
+                    <li><strong>Search Radius</strong>: Control your commute distance</li>
+                    <li><strong>Experience Matching</strong>: Filter by your experience level (Premium)</li>
+                    <li><strong>Job Type Filters</strong>: Full-time, contract, remote, etc. (Premium)</li>
+                </ul>
+                <p style="margin-top: 15px; opacity: 0.8; font-size: 0.9em;">
+                    💡 Pro Tip: Use "Sort by Newest" + "Last 24 hours" to apply to jobs within minutes of posting!
+                </p>
+            </div>
+            
+            <div class="info-box" id="linkedinInfo">
+                <h3>F_TPR Parameter Breakdown (LinkedIn)</h3>
                 <ul>
                     <li><strong>r60</strong>: Last 60 seconds (1 minute)</li>
                     <li><strong>r3600</strong>: Last 3,600 seconds (1 hour)</li>

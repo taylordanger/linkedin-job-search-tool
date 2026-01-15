@@ -366,6 +366,28 @@ header h1 {
     text-transform: none;
 }
 
+.edge-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+    color: #000000;
+    padding: 2px 8px;
+    font-size: 0.65em;
+    font-weight: bold;
+    border-radius: 3px;
+    margin-left: 8px;
+    letter-spacing: 1px;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        box-shadow: 0 0 5px rgba(255, 107, 107, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 15px rgba(255, 107, 107, 0.8);
+    }
+}
+
 .form-group {
     margin-bottom: 25px;
 }

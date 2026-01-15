@@ -160,6 +160,11 @@ function generateIndeedURL() {
     const location = document.getElementById('location').value.trim();
     const datePosted = document.getElementById('datePosted').value;
     const remoteFilter = document.getElementById('remoteFilter').checked;
+    const sortBy = document.getElementById('sortBy').value;
+    const minSalary = document.getElementById('minSalary').value;
+    const radius = document.getElementById('radius').value;
+    const experienceLevel = Array.from(document.getElementById('experienceLevel').selectedOptions).map(opt => opt.value);
+    const jobType = Array.from(document.getElementById('jobType').selectedOptions).map(opt => opt.value);
     
     if (keywords) {
         params.append('q', keywords);
@@ -171,6 +176,39 @@ function generateIndeedURL() {
     
     if (datePosted) {
         params.append('fromage', datePosted);
+    }
+    
+    // POWER FEATURE: Sort by date (get newest jobs first!)
+    if (sortBy === 'date') {
+        params.append('sort', 'date');
+    }
+    
+    // POWER FEATURE: Minimum salary filter
+    if (minSalary) {
+        params.append('salary', minSalary);
+    }
+    
+    // POWER FEATURE: Search radius
+    if (radius) {
+        params.append('radius', radius);
+    }
+    
+    // POWER FEATURE: Experience level
+    if (experienceLevel.length > 0 && isPremiumUser) {
+        const expLevelMap = {'1': 'entry_level', '2': 'entry_level', '3': 'mid_level', '4': 'mid_level', '5': 'senior_level', '6': 'senior_level'};
+        const mappedLevels = experienceLevel.map(level => expLevelMap[level]).filter((v, i, a) => a.indexOf(v) === i);
+        if (mappedLevels.length > 0) {
+            params.append('explvl', mappedLevels.join(','));
+        }
+    }
+    
+    // POWER FEATURE: Job type
+    if (jobType.length > 0 && isPremiumUser) {
+        const jobTypeMap = {'F': 'fulltime', 'P': 'parttime', 'C': 'contract', 'T': 'temporary', 'I': 'internship'};
+        const mappedTypes = jobType.map(type => jobTypeMap[type]);
+        if (mappedTypes.length > 0) {
+            params.append('jt', mappedTypes.join(','));
+        }
     }
     
     if (remoteFilter) {
@@ -191,6 +229,9 @@ function generateZipRecruiterURL() {
     const location = document.getElementById('location').value.trim();
     const datePosted = document.getElementById('datePosted').value;
     const remoteFilter = document.getElementById('remoteFilter').checked;
+    const sortBy = document.getElementById('sortBy').value;
+    const minSalary = document.getElementById('minSalary').value;
+    const radius = document.getElementById('radius').value;
     
     if (keywords) {
         params.append('search', keywords);
@@ -202,6 +243,22 @@ function generateZipRecruiterURL() {
     
     if (datePosted) {
         params.append('days', datePosted);
+    }
+    
+    // POWER FEATURE: Sort by date
+    if (sortBy === 'date') {
+        params.append('form', 'jobs-landing');
+        params.append('sort', 'date_posted_desc');
+    }
+    
+    // POWER FEATURE: Minimum salary
+    if (minSalary) {
+        params.append('refine_by_salary', minSalary);
+    }
+    
+    // POWER FEATURE: Search radius
+    if (radius) {
+        params.append('radius', radius);
     }
     
     if (remoteFilter) {
@@ -222,6 +279,10 @@ function generateGlassdoorURL() {
     const location = document.getElementById('location').value.trim();
     const datePosted = document.getElementById('datePosted').value;
     const remoteFilter = document.getElementById('remoteFilter').checked;
+    const sortBy = document.getElementById('sortBy').value;
+    const minSalary = document.getElementById('minSalary').value;
+    const experienceLevel = Array.from(document.getElementById('experienceLevel').selectedOptions).map(opt => opt.value);
+    const jobType = Array.from(document.getElementById('jobType').selectedOptions).map(opt => opt.value);
     
     if (keywords) {
         params.append('sc.keyword', keywords);
@@ -234,6 +295,35 @@ function generateGlassdoorURL() {
     
     if (datePosted) {
         params.append('fromAge', datePosted);
+    }
+    
+    // POWER FEATURE: Sort by date
+    if (sortBy === 'date') {
+        params.append('sortBy', 'date_desc');
+    }
+    
+    // POWER FEATURE: Minimum salary (annual)
+    if (minSalary) {
+        params.append('minSalary', minSalary);
+        params.append('includeNoSalaryJobs', 'false');
+    }
+    
+    // POWER FEATURE: Seniority/Experience level
+    if (experienceLevel.length > 0 && isPremiumUser) {
+        const seniorityMap = {'1': '1', '2': '1', '3': '2', '4': '3', '5': '4', '6': '5'};
+        const mappedLevels = experienceLevel.map(level => seniorityMap[level]).filter((v, i, a) => a.indexOf(v) === i);
+        if (mappedLevels.length > 0) {
+            params.append('seniorityType', mappedLevels.join(','));
+        }
+    }
+    
+    // POWER FEATURE: Job type
+    if (jobType.length > 0 && isPremiumUser) {
+        const jobTypeMap = {'F': 'fulltime', 'P': 'parttime', 'C': 'contract', 'T': 'temporary', 'I': 'internship'};
+        const mappedTypes = jobType.map(type => jobTypeMap[type]);
+        if (mappedTypes.length > 0) {
+            params.append('jobType', mappedTypes.join(','));
+        }
     }
     
     if (remoteFilter) {
